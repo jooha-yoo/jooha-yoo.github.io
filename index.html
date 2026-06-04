@@ -32,12 +32,12 @@
     .img-container img { width: 100%; height: 100%; object-fit: cover; }
     .layout { display: grid; grid-template-columns: clamp(260px, 28vw, 480px) 1fr; min-height: 100vh; }
     .sidebar { position: sticky; top: 0; height: 100vh; max-height: 100vh; overflow-y: auto; background: var(--sidebar-bg); border-right: 1px solid var(--border); padding: 2.5rem 2rem; display: flex; flex-direction: column; justify-content: space-between; overflow-y: auto; }
-    .sidebar h1 { font-family: 'DM Serif Display', serif; font-size: 2.5rem; line-height: 1.1; color: var(--accent-1); margin-top: .5rem; }
+    .sidebar h1 { font-family: 'DM Serif Display', serif; font-size: 2.8rem; line-height: 1.1; color: var(--accent-1); margin-top: .5rem; }
     .tagline { color: var(--accent-2); font-size: 1rem; font-weight: 700; margin-top: .5rem; }
     .bio { margin-top: 0.6rem; color: var(--text-muted); font-size: 1rem; }
     .bio a { color: var(--accent-2); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
     .bio a:hover { color: var(--accent-1); }
-    .meta-block { margin-top: 1.4rem; display: grid; gap: .35rem; color: var(--text-muted); font-size: .8rem; }
+    .meta-block { margin-top: 1.4rem; display: grid; gap: .35rem; color: var(--text-muted); font-size: .85rem; }
     .meta-block strong { color: var(--text); }
     .sidebar-nav { margin-top: 2rem; display: grid; gap: .18rem; }
     .sidebar-nav a { display: flex; align-items: center; gap: .75rem; padding: .48rem .6rem; border-radius: 8px; color: var(--text-muted); text-decoration: none; font-weight: 600; font-size: .86rem; transition: .2s ease; }
@@ -51,7 +51,7 @@
     main { padding: 3.5rem 3rem; }
     section { padding: 4rem 0; border-bottom: 1px solid var(--border); }
     section:last-child { border-bottom: 0; }
-    .section-label { letter-spacing: .1em; text-transform: uppercase; font-size: 2rem; font-weight: 800; margin-bottom: .65rem; }
+    .section-label { letter-spacing: .1em; text-transform: uppercase; font-size: 1.8rem; font-weight: 800; margin-bottom: .65rem; }
     h2 { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 3vw, 3rem); line-height: 1.05; color: var(--accent-1); margin-bottom: 1.4rem; }
     h3 { color: var(--accent-1); }
     p { color: var(--text-muted); max-width: 68ch; }
@@ -73,7 +73,7 @@
     .proof-num { font-family: 'DM Serif Display', serif; color: var(--accent-2); font-size: 2.55rem; line-height: 1; }
     .proof-label { font-size: .82rem; margin-top: .4rem; }
 
-    /* ── SUBSTACK SECTION ─────────────────────────────────── */
+    /* Substack section */
     .substack-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -209,7 +209,7 @@
     .connect-card blockquote { font-family: 'DM Serif Display', serif; font-size: clamp(1.6rem, 3vw, 2.4rem); line-height: 1.15; color: var(--accent-1); }
     .connect-card p { font-size: .95rem; }
 
-    /* ── ROLES ─────────────────────────────────────────────── */
+    /* Roles section */
     .roles-intro { max-width: 68ch; margin-bottom: 1.3rem; }
     .role-tabs { display: flex; flex-wrap: wrap; gap: .6rem; margin: 1.2rem 0 1.35rem; }
     .role-tab { border: 1px solid var(--border); background: var(--card-soft); color: var(--text-muted); border-radius: 999px; padding: .56rem .95rem; font-weight: 800; font-size: .78rem; cursor: pointer; transition: transform .18s ease, background .18s ease, color .18s ease, border-color .18s ease; }
@@ -313,7 +313,6 @@
       </div>
       <h1>Jooha Yoo</h1>
       <p class="tagline">Innovative Engineer & Researcher, Cross-Cultural Communicator & Leader</p>
-      <p class="bio">I am passionate about building technology at the intersection of people, systems, and decision-making.</p>
       <div class="meta-block">
         <span><strong>Education:</strong> Calvin University</span>
         <span><strong>Fields of Study:</strong> Computer Science, Spanish, Data Science</span>
@@ -341,12 +340,12 @@
 
   <main>
     <section id="home" class="hero">
-      <p class="section-label fade-in">About Me</p>
-      <p class="hero-copy fade-in">I'm a passionate, innovative builder and study technology at the intersection of people, systems, and decision-making. My experiences range from backend and frontend engineering, research, and stakeholder engagement along with my leadership roles.</p>
+      <p class="section-label">About Me</p>
+      <p class="hero-copy fade-in">I am passionate about technology, especially Artifical Intelligence at the intersection of people, systems, and decision-making! <br> <br> I build software systems and study how people use them, focusing on AI-assisted tools, human behavior, and decision-making. I’ve worked across full-stack development, AI evaluation research, and teaching, combining technical implementation with human-centered design and experimentation.</p>
     </section>
 
     <section id="proof">
-      <p class="section-label">My Story in Numbers</p>
+      <p class="section-label ">My Story in Numbers</p>
       <div class="proof-strip">
         <div class="proof-card"><div class="proof-num counter" data-target="250">0</div><p class="proof-label">Research participants who were impacted by tool I published and built</p></div>
         <div class="proof-card"><div class="proof-num counter" data-target="184">0</div><p class="proof-label">People mentored under my guidance and leadership</p></div>
@@ -443,12 +442,14 @@
         </article>
 
         <article class="work-card fade-in" data-project="advisor">
-          <a class="github-corner" href="https://github.com/yourusername" target="_blank" aria-label=""><i class="fab fa-github"></i></a>
+          <a class="github-corner" href="https://github.com/jooha-yoo/Brisa" target="_blank" aria-label=""><i class="fab fa-github"></i></a>
           <div class="work-body">
-            <h3>Proj 4</h3>
+            <h3>Brisa, SSR and CSR Analysis</h3>
             <p class="work-hook"></p>
           </div>
-          <div class="work-preview"></div>
+          <div class="work-preview">
+            <img src="images/brisa.jpg" alt="Brisa">
+          </div>
           <div class="work-hover-panel">
             <div class="hover-line"><strong>Problem</strong><p>Course data is difficult to search manually when planning quickly.</p></div>
             <div class="hover-line"><strong>Built</strong><p>A tool-based assistant using structured course data and targeted search.</p></div>
