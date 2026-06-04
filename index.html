@@ -1,290 +1,1157 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jooha Yoo | Portfolio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <style>
+    :root {
+      --bg: #f4f3ee;
+      --sidebar-bg: #eae7e2;
+      --card-bg: #e7e3dd;
+      --card-soft: #EEEAE4;
+      --border: #cfd7cd;
+      --text: #000000;
+      --text-muted: #58534e;
+      --accent-1: #152e51;
+      --accent-2: #345d8d;
+      --accent-3: #4A7B6F;
+      --shadow: rgba(46, 43, 39, 0.11);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.65; }
+    a { color: inherit; }
+    .img-container { width: 150px; height: 150px; overflow: hidden; border-radius: 50%; }
+    .img-container img { width: 100%; height: 100%; object-fit: cover; }
+    .layout { display: grid; grid-template-columns: clamp(260px, 28vw, 480px) 1fr; min-height: 100vh; }
+    .sidebar { position: sticky; top: 0; height: 100vh; max-height: 100vh; overflow-y: auto; background: var(--sidebar-bg); border-right: 1px solid var(--border); padding: 2.5rem 2rem; display: flex; flex-direction: column; justify-content: space-between; overflow-y: auto; }
+    .sidebar h1 { font-family: 'DM Serif Display', serif; font-size: 2.5rem; line-height: 1.1; color: var(--accent-1); margin-top: .5rem; }
+    .tagline { color: var(--accent-2); font-size: 1rem; font-weight: 700; margin-top: .5rem; }
+    .bio { margin-top: 0.6rem; color: var(--text-muted); font-size: 1rem; }
+    .bio a { color: var(--accent-2); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+    .bio a:hover { color: var(--accent-1); }
+    .meta-block { margin-top: 1.4rem; display: grid; gap: .35rem; color: var(--text-muted); font-size: .8rem; }
+    .meta-block strong { color: var(--text); }
+    .sidebar-nav { margin-top: 2rem; display: grid; gap: .18rem; }
+    .sidebar-nav a { display: flex; align-items: center; gap: .75rem; padding: .48rem .6rem; border-radius: 8px; color: var(--text-muted); text-decoration: none; font-weight: 600; font-size: .86rem; transition: .2s ease; }
+    .sidebar-nav a:hover, .sidebar-nav a.active { color: var(--accent-2); background: rgba(196,106,58,.08); }
+    .dot { width: 7px; height: 7px; border-radius: 999px; background: var(--border); }
+    .sidebar-nav a:hover .dot, .sidebar-nav a.active .dot { background: var(--accent-2); }
+    .sidebar-footer { display: flex; gap: 1rem; font-size: 1.1rem; margin-bottom: .8rem; }
+    .sidebar-footer a { color: var(--text-muted); transition: .2s ease; }
+    .sidebar-footer a:hover { color: var(--accent-2); }
+
+    main { padding: 3.5rem 3rem; }
+    section { padding: 4rem 0; border-bottom: 1px solid var(--border); }
+    section:last-child { border-bottom: 0; }
+    .section-label { letter-spacing: .1em; text-transform: uppercase; font-size: 2rem; font-weight: 800; margin-bottom: .65rem; }
+    h2 { font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 3vw, 3rem); line-height: 1.05; color: var(--accent-1); margin-bottom: 1.4rem; }
+    h3 { color: var(--accent-1); }
+    p { color: var(--text-muted); max-width: 68ch; }
+
+    .hero { min-height: 32vh; display: grid; align-content: center; padding-top: 1rem; }
+    .hero h2 { font-size: clamp(3rem, 8vw, 6.5rem); letter-spacing: -0.06em; max-width: 900px; }
+    .hero-subtitle { font-size: clamp(1rem, 1vw, 1.35rem); color: var(--accent-3); font-weight: 700; margin-top: -0.8rem; }
+    .hero-copy { margin-top: 1.2rem; font-size: 1rem; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2rem; }
+    .btn { display: inline-flex; align-items: center; gap: .5rem; padding: .75rem 1.2rem; border-radius: 999px; text-decoration: none; font-weight: 800; border: 1px solid var(--accent-1); transition: .2s ease; }
+    .btn.primary { background: var(--accent-1); color: var(--bg); }
+    .btn.secondary { color: var(--accent-1); }
+    .btn:hover { transform: translateY(-2px); }
+
+    .proof-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+    .proof-card, .work-card, .group-card, .panel-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; }
+    .proof-card { padding: 1.35rem; opacity: 0; transform: translateY(18px); transition: .5s ease; }
+    .proof-card.visible { opacity: 1; transform: none; }
+    .proof-num { font-family: 'DM Serif Display', serif; color: var(--accent-2); font-size: 2.55rem; line-height: 1; }
+    .proof-label { font-size: .82rem; margin-top: .4rem; }
+
+    /* ── SUBSTACK SECTION ─────────────────────────────────── */
+    .substack-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 1.2rem;
+    }
+    .substack-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.4rem;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: .65rem;
+      transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+      cursor: pointer;
+    }
+    .substack-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(52,93,141,.45);
+      box-shadow: 0 12px 28px var(--shadow);
+    }
+    .substack-kicker {
+      font-family: 'DM Mono', monospace;
+      font-size: .7rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--accent-2);
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+    }
+    .substack-kicker i { font-size: .75rem; }
+    .substack-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.35rem;
+      line-height: 1.15;
+      color: var(--accent-1);
+      max-width: 100%;
+    }
+    .substack-footer {
+      margin-top: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: .76rem;
+      color: var(--text-muted);
+    }
+    .substack-read {
+      color: var(--accent-2);
+      font-weight: 800;
+      font-size: .78rem;
+      display: flex;
+      align-items: center;
+      gap: .3rem;
+    }
+    .substack-all-link {
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      margin-top: 1.1rem;
+      color: var(--accent-2);
+      font-weight: 800;
+      font-size: .85rem;
+      text-decoration: none;
+      transition: gap .2s ease;
+    }
+    .substack-all-link:hover { gap: .7rem; }
+
+    .side-panel { padding: 1.4rem; min-height: 520px; display: flex; flex-direction: column; justify-content: space-between; }
+    .panel-kicker { font-family: 'DM Mono', monospace; color: var(--accent-2); font-size: .74rem; text-transform: uppercase; letter-spacing: .1em; }
+    .panel-title { font-family: 'DM Serif Display', serif; font-size: 2.2rem; line-height: 1; margin: .4rem 0 .8rem; }
+    .panel-copy { font-size: .94rem; }
+    .mini-heading { margin-top: 1.2rem; color: var(--text); font-weight: 800; font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; }
+    .proof-list, .tool-proof-list { list-style: none; margin-top: .5rem; display: grid; gap: .35rem; color: var(--text-muted); }
+    .proof-list li::before, .tool-proof-list li::before { content: '•'; color: var(--accent-2); font-weight: bold; margin-right: .45rem; }
+    .skill-row { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .65rem; }
+    .chip { font-family: 'DM Mono', monospace; font-size: .72rem; padding: .32rem .6rem; border-radius: 999px; background: var(--accent-1); color: var(--bg); }
+
+    .work-intro { margin-bottom: 1.4rem; }
+    .work-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+    .work-card { min-height: 280px; position: relative; overflow: hidden; transition: transform .22s ease; cursor: pointer; display: flex; flex-direction: column; }
+    .work-card:hover { transform: translateY(-5px); }
+    .work-preview { height: 200px; position: relative; display: flex; align-items: top; justify-content: center; overflow: hidden; border-top: 1px solid var(--border); margin-top: auto; background: radial-gradient(circle at 25% 20%, rgba(255,255,255,.5), transparent 0 18%, transparent 19%), var(--card-soft); transition: opacity .28s ease, transform .28s ease, filter .28s ease; }
+    .work-card:hover .work-preview { opacity: 0; transform: translateY(14px) scale(.98); filter: blur(2px); }
+    .work-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .github-corner { position: absolute; top: .85rem; right: .85rem; z-index: 4; width: 38px; height: 38px; border-radius: 999px; display: grid; place-items: center; text-decoration: none; background: rgba(26,26,26,.88); color: var(--bg); transition: .2s ease; }
+    .github-corner:hover { transform: scale(1.08); background: var(--accent-2); }
+    .work-body { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; }
+    .work-card .tag { font-family: 'DM Mono', monospace; color: var(--accent-2); font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; }
+    .work-card h3 { font-family: 'DM Serif Display', serif; font-size: 1.55rem; margin: .3rem 0 .5rem; }
+    .work-hook { font-size: .9rem; }
+    .open-detail { margin-top: 1rem; color: var(--accent-2); font-weight: 800; font-size: .84rem; }
+    .work-hover-panel { position: absolute; inset: 0; z-index: 3; padding: 1.35rem; display: flex; flex-direction: column; justify-content: center; gap: .75rem; background: linear-gradient(145deg, rgba(240,237,232,.98), rgba(226,221,215,.98)); opacity: 0; transform: translateY(12px); pointer-events: none; transition: opacity .28s ease, transform .28s ease; }
+    .work-card:hover .work-hover-panel { opacity: 1; transform: translateY(0); }
+    .hover-line { border-left: 3px solid var(--accent-2); padding-left: .8rem; }
+    .hover-line strong { display: block; color: var(--text); font-size: .76rem; text-transform: uppercase; letter-spacing: .08em; margin-bottom: .14rem; }
+    .hover-line p { font-size: .83rem; line-height: 1.45; }
+    .hover-cta { margin-top: .25rem; color: var(--accent-2); font-weight: 800; font-size: .86rem; }
+
+    .project-modal { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 1rem; background: rgba(46,43,39,.62); backdrop-filter: blur(5px); opacity: 0; pointer-events: none; transition: opacity .22s ease; }
+    .project-modal.open { opacity: 1; pointer-events: all; }
+    .project-box { max-width: 820px; width: 100%; max-height: 88vh; overflow-y: auto; background: var(--bg); border: 1px solid var(--border); border-radius: 24px; transform: translateY(16px) scale(.98); transition: transform .22s ease; }
+    .project-modal.open .project-box { transform: none; }
+    .modal-preview { height: 210px; border-bottom: 1px solid var(--border); background: linear-gradient(135deg, rgba(196,106,58,.38), rgba(74,123,111,.32)), var(--card-soft); display: grid; place-items: center; }
+    .modal-preview .preview-icon { width: 92px; height: 92px; font-size: 2.2rem; }
+    .project-content { padding: 1.6rem; }
+    .project-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 1rem; }
+    .project-top h3 { font-family: 'DM Serif Display', serif; font-size: 2.1rem; line-height: 1; }
+    .modal-actions { display: flex; gap: .55rem; align-items: center; }
+    .modal-icon-link, .modal-close { width: 40px; height: 40px; border-radius: 999px; display: grid; place-items: center; border: 1px solid var(--border); background: var(--card-soft); color: var(--text); cursor: pointer; text-decoration: none; font-size: 1rem; }
+    .modal-close { font-size: 1.35rem; line-height: 1; }
+    .modal-detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; margin-top: 1.2rem; }
+    .detail-tile { border: 1px solid var(--border); border-radius: 16px; padding: 1rem; background: var(--card-soft); }
+    .detail-tile strong { color: var(--accent-2); display: block; margin-bottom: .3rem; }
+    .detail-tile p { font-size: .88rem; }
+    .tool-link-row { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .35rem; }
+    .tool-link { border: 1px solid var(--border); border-radius: 999px; padding: .32rem .58rem; background: rgba(255,255,255,.28); color: var(--text); text-decoration: none; font-family: 'DM Mono', monospace; font-size: .72rem; transition: transform .18s ease, background .18s ease, border-color .18s ease; }
+    .tool-link:hover { transform: translateY(-2px); background: var(--accent-1); color: var(--bg); border-color: var(--accent-1); }
+
+    .toolbox-intro { margin-bottom: 2rem; }
+    .tool-category { margin-bottom: 2.1rem; }
+    .tool-category h3 { font-family: 'DM Serif Display', serif; font-size: 1.45rem; margin-bottom: .9rem; color: var(--accent-1); }
+    .tool-cloud { display: flex; flex-wrap: wrap; gap: .65rem; align-content: flex-start; }
+    .tool-chip { border: 1px solid var(--border); border-radius: 999px; padding: .56rem .95rem; background: var(--card-soft); color: var(--text); font-family: 'DM Mono', monospace; font-size: .78rem; cursor: pointer; transition: transform .2s ease, box-shadow .2s ease, background .2s ease, color .2s ease, border-color .2s ease; }
+    .tool-chip:hover { transform: translateY(-2px); background: var(--accent-1); color: var(--bg); border-color: var(--accent-1); box-shadow: 0 10px 22px var(--shadow); }
+    .tool-chip:focus-visible { outline: 3px solid rgba(196,106,58,.28); outline-offset: 3px; }
+    .tool-mini { border: 1px solid var(--border); border-radius: 16px; padding: .9rem; background: rgba(255,255,255,.22); }
+    .tool-mini strong { color: var(--accent-2); display: block; margin-bottom: .25rem; font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; }
+
+    .connect-card { background: var(--card-soft); border: 1px solid var(--border); border-radius: 24px; padding: 2rem; display: grid; grid-template-columns: 1.1fr .9fr; gap: 1.5rem; align-items: center; }
+    .connect-card blockquote { font-family: 'DM Serif Display', serif; font-size: clamp(1.6rem, 3vw, 2.4rem); line-height: 1.15; color: var(--accent-1); }
+    .connect-card p { font-size: .95rem; }
+
+    /* ── ROLES ─────────────────────────────────────────────── */
+    .roles-intro { max-width: 68ch; margin-bottom: 1.3rem; }
+    .role-tabs { display: flex; flex-wrap: wrap; gap: .6rem; margin: 1.2rem 0 1.35rem; }
+    .role-tab { border: 1px solid var(--border); background: var(--card-soft); color: var(--text-muted); border-radius: 999px; padding: .56rem .95rem; font-weight: 800; font-size: .78rem; cursor: pointer; transition: transform .18s ease, background .18s ease, color .18s ease, border-color .18s ease; }
+    .role-tab:hover { transform: translateY(-2px); color: var(--text); border-color: rgba(58, 125, 196, 0.45); }
+    .role-tab.active { background: var(--accent-1); color: var(--bg); border-color: var(--accent-1); }
+    .role-tab-content { display: none; }
+    .role-tab-content.active { display: block; }
+
+    /* Fixed-height "All" tab with pagination */
+    .all-roles-viewport {
+      overflow: hidden;
+      position: relative;
+    }
+    .all-roles-pages {
+      display: flex;
+      transition: transform .4s cubic-bezier(.4,0,.2,1);
+      will-change: transform;
+    }
+    .all-roles-page {
+      flex: 0 0 100%;
+      width: 100%;
+    }
+    .all-pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .65rem;
+      margin-top: 1rem;
+    }
+    .all-page-btn {
+      width: 34px; height: 34px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--card-soft);
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: .85rem;
+      display: grid;
+      place-items: center;
+      transition: background .18s ease, color .18s ease, border-color .18s ease;
+    }
+    .all-page-btn:hover, .all-page-btn.active { background: var(--accent-1); color: var(--bg); border-color: var(--accent-1); }
+    .all-page-dots { display: flex; gap: .45rem; align-items: center; }
+    .all-dot { width: 7px; height: 7px; border-radius: 999px; background: var(--border); transition: background .2s ease, transform .2s ease; cursor: pointer; }
+    .all-dot.active { background: var(--accent-2); transform: scale(1.3); }
+
+    .role-cloud { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .85rem; }
+    .role-card-simple { min-height: 210px; position: relative; overflow: hidden; padding: 1.1rem; background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; transition: transform .22s ease, border-color .22s ease; }
+    .role-card-simple:hover { transform: translateY(-4px); border-color: rgba(103, 128, 218, 0.45); }
+    .role-main, .role-hover { transition: opacity .32s ease, transform .32s ease; }
+    .role-main { height: 100%; display: flex; flex-direction: column; justify-content: space-between; gap: .9rem; }
+    .role-card-simple h4 { font-family: 'DM Serif Display', serif; font-size: 1.38rem; line-height: 1.08; color: var(--accent-1); margin-bottom: .35rem; }
+    .role-org { color: var(--accent-2); font-weight: 800; font-size: .8rem; letter-spacing: .03em; margin-bottom: .55rem; }
+    .role-desc { font-size: 1rem; color: var(--text-muted); }
+    .role-hint { font-family: 'DM Mono', monospace; color: var(--accent-2); font-size: .7rem; font-weight: 700; margin-top: auto; }
+    .role-hover { position: absolute; inset: 0; padding: 1.15rem; opacity: 0; transform: translateY(18px); pointer-events: none; display: flex; flex-direction: column; justify-content: center; background: linear-gradient(145deg, rgba(240,237,232,.98), rgba(226,221,215,.98)); }
+    .role-card-simple.has-path:hover .role-main { opacity: 0; transform: translateY(-12px); }
+    .role-card-simple.has-path:hover .role-hover { opacity: 1; transform: translateY(0); }
+    .role-hover-title { font-family: 'DM Mono', monospace; color: var(--accent-2); font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; margin-bottom: .75rem; font-weight: 800; }
+    .role-path-list { list-style: none; display: grid; gap: .65rem; color: var(--text-muted); }
+    .role-path-list li { position: relative; padding-left: 1.15rem; font-size: .84rem; }
+    .role-path-list li::before { content: ''; position: absolute; left: 0; top: .48rem; width: 7px; height: 7px; border-radius: 999px; background: var(--accent-2); }
+    .role-path-list li:not(:last-child)::after { content: ''; position: absolute; left: 3px; top: 1rem; height: .95rem; border-left: 1px dashed rgba(196,106,58,.5); }
+
+    #contact { text-align: center; padding-bottom: 5rem; }
+    #contact p { margin: 0 auto 1.6rem; }
+    .contact-links { display: flex; flex-wrap: wrap; justify-content: center; gap: .75rem; }
+
+    .fade-in { opacity: 0; transform: translateY(10px); transition: opacity .55s ease, transform .55s ease; }
+    .fade-in.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { 
+        position: static;
+        height: auto;       
+        max-height: none;
+        overflow: visible;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding: 2rem 1.5rem;
+       }
+      main { padding: 2rem 1.25rem; }
+      .proof-strip { grid-template-columns: repeat(2, 1fr); }
+      .substack-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 700px) {
+      section { padding: 3rem 0; }
+      .proof-strip, .work-grid, .modal-detail-grid { grid-template-columns: 1fr; }
+      .role-cloud { grid-template-columns: 1fr; }
+      .substack-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
 <body>
 <div class="layout">
-
   <aside class="sidebar">
     <div>
-
-      <div class="avatar"></div>
-
-      <h1> Name</h1>
-
-      <p class="tagline">
-        Title
-      </p>
-
-      <p class="bio">
-        bio
-      </p>
-
-      <div class="meta-block">
-        <span><strong>School:</strong> </span>
-        <span><strong>Focus:</strong> </span>
-        <span><strong>Location:</strong> </span>
-        <span><strong>Email:</strong> </span>
+      <div class="img-container"> 
+        <img src="images/portrait.jpg"> 
       </div>
-
-      <nav class="sidebar-nav">
-
-        <a href="#home">
-          <span class="dot"></span>
-          Home
-        </a>
-
-        <a href="#proof">
-          <span class="dot"></span>
-          Proof
-        </a>
-
-        <a href="#work">
-          <span class="dot"></span>
-          Selected Work
-        </a>
-
-        <a href="#roles">
-          <span class="dot"></span>
-          Roles
-        </a>
-
-        <a href="#tools">
-          <span class="dot"></span>
-          Toolbox
-        </a>
-
-        <a href="#contact">
-          <span class="dot"></span>
-          Contact
-        </a>
-
+      <h1>Jooha Yoo</h1>
+      <p class="tagline">Innovative Engineer & Researcher, Cross-Cultural Communicator & Leader</p>
+      <p class="bio">I am passionate about building technology at the intersection of people, systems, and decision-making.</p>
+      <div class="meta-block">
+        <span><strong>Education:</strong> Calvin University</span>
+        <span><strong>Fields of Study:</strong> Computer Science, Spanish, Data Science</span>
+        <span><strong>Expected Graduation:</strong> May 2026</span>
+        <span><strong>Email:</strong> joohayoo5@gmail.com</span>
+      </div>
+      <nav class="sidebar-nav" id="sideNav">
+        <a href="#home" class="active"><span class="dot"></span>About</a>
+        <a href="#work"><span class="dot"></span>Journey</a>
+        <a href="#roles"><span class="dot"></span>My Roles</a>
+        <a href="#writing"><span class="dot"></span>Writing</a>
+        <a href="#tools"><span class="dot"></span>My ToolBox</a>
+        <a href="#contact"><span class="dot"></span>Connect</a>
       </nav>
-
     </div>
-
     <div>
       <div class="sidebar-footer">
-        <a href="#"><i class="fab fa-linkedin"></i></a>
-        <a href="#"><i class="fab fa-github"></i></a>
-        <a href="#"><i class="fas fa-envelope"></i></a>
+        <a href="https://www.linkedin.com/in/hannah-yoo-a8b128257/" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <a href="https://github.com/jooha-yoo" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+        <a href="mailto:joohayoo5@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
       </div>
+      <p style="font-size:.72rem; color:var(--text-muted);">&copy; <span id="year"></span> Jooha Yoo. All Rights Reserved.</p>
     </div>
-
   </aside>
 
   <main>
-
     <section id="home" class="hero">
-
-      <p class="section-label">
-        Portfolio
-      </p>
-
-      <h2>
-        Main Headline
-      </h2>
-
-      <p class="hero-subtitle">
-        Subtitle
-      </p>
-
-      <p class="hero-copy">
-        Intro paragraph.
-      </p>
-
-      <div class="hero-actions">
-        <a href="#" class="btn primary">
-          Primary Button
-        </a>
-
-        <a href="#" class="btn secondary">
-          Secondary Button
-        </a>
-      </div>
-
+      <p class="section-label fade-in">About Me</p>
+      <p class="hero-copy fade-in">I'm a passionate, innovative builder and study technology at the intersection of people, systems, and decision-making. My experiences range from backend and frontend engineering, research, and stakeholder engagement along with my leadership roles.</p>
     </section>
 
     <section id="proof">
-
-      <p class="section-label">
-        Proof
-      </p>
-
-      <h2>
-        Why I’m credible
-      </h2>
-
+      <p class="section-label">My Story in Numbers</p>
       <div class="proof-strip">
-
-        <div class="proof-card">
-          <div class="proof-num">0</div>
-          <p class="proof-label">Metric</p>
-        </div>
-
-        <div class="proof-card">
-          <div class="proof-num">0</div>
-          <p class="proof-label">Metric</p>
-        </div>
-
-        <div class="proof-card">
-          <div class="proof-num">0</div>
-          <p class="proof-label">Metric</p>
-        </div>
-
-        <div class="proof-card">
-          <div class="proof-num">0</div>
-          <p class="proof-label">Metric</p>
-        </div>
-
+        <div class="proof-card"><div class="proof-num counter" data-target="250">0</div><p class="proof-label">Research participants who were impacted by tool I published and built</p></div>
+        <div class="proof-card"><div class="proof-num counter" data-target="184">0</div><p class="proof-label">People mentored under my guidance and leadership</p></div>
+        <div class="proof-card"><div class="proof-num counter" data-target="30">0</div><p class="proof-label">Technical projects delivered under my leadership</p></div>
+        <div class="proof-card"><div class="proof-num counter" data-target="5">0</div><p class="proof-label">Pilot study sessions designed and facilitated</p></div>
       </div>
+    </section>
+
+    <!-- Substack section -->
+    <section id="writing">
+      <p class="section-label">My Thoughts</p>
+      <p class="fade-in" style="max-width:60ch; margin-bottom: .25rem;"> Click and subscribe to <a class="substack-all-link fade-in" href="https://joohayoo.substack.com/profile/posts" target="_blank" rel="noopener">
+        read all my latest posts on Substack <i class="fas fa-arrow-right"></i>
+      </a></p>
+
+      <div class="substack-grid fade-in">
+        <!-- Post 1 -->
+        <a class="substack-card" href="https://joohayoo.substack.com/p/how-are-you-using-ai-hackathon-judges" target="_blank" rel="noopener">
+          <div class="substack-kicker"> AI / Hackathon </div>
+          <p class="substack-title">"How Are You Using AI?", the Hackathon judges asked when we presented our AI-powered tool, Stride</p>
+          <p class="substack-excerpt">Building an AI-powered tool? with AI? under 24 hours? Oh yes. It's most definitely feasible these days.</p>
+          <div class="substack-footer">
+            <span>March 22, 2026</span>
+            <span class="substack-read">Read on Substack<i class="fas fa-arrow-right"></i></span>
+          </div>
+        </a>
+
+        <!-- Post 2 -->
+        <a class="substack-card" href="" target="_blank" rel="noopener">
+          <div class="substack-kicker"> </div>
+          <p class="substack-title"> </p>
+          <p class="substack-excerpt"></p>
+          <div class="substack-footer">
+            <span></span>
+            <span class="substack-read">Read on Substack <i class="fas fa-arrow-right"></i></span>
+          </div>
+        </a>
+      </div>
+
+      
 
     </section>
 
     <section id="work">
-
-      <p class="section-label">
-        Selected Work
-      </p>
-
-      <h2>
-        Projects
-      </h2>
-
+      <p class="section-label">My Projects</p>
+      <p class="toolbox-intro fade-in">Click on a project to see details!</p>
       <div class="work-grid">
-
-        <article class="work-card">
+        <article class="work-card fade-in" data-project="llm">
+          <a class="github-corner" href="https://github.com/AIToolsLab/writing-tools" target="_blank" aria-label="View on GitHub"><i class="fab fa-github"></i></a>
+          <div class="work-body">
+            <h3>Thoughtful AI Writing Tools</h3>
+            <p class="work-hook">A human-centered study of where LLMs feel useful, reliable, or inconsistent.</p>
+          </div>
+          <div class="work-preview">
+            <img src="images/thoughtful-ai.jpg" alt="Thoughtful AI Writing Tools">
+          </div>
+          <div class="work-hover-panel">
+            <div class="hover-line"><strong>Problem</strong><p>AI can seem helpful while still being inconsistent or hard to trust.</p></div>
+            <div class="hover-line"><strong>Built</strong><p>An evaluation framework for finding reliability gaps in LLM behavior.</p></div>
+            <div class="hover-line"><strong>Impact</strong><p>Clearer patterns for prompt design, system design, and human-AI evaluation.</p></div>
+          </div>
         </article>
 
-        <article class="work-card">
+        <article class="work-card fade-in" data-project="writing">
+          <a class="github-corner" href="https://github.com/jooha-yoo/stride/tree/main/2026-hackathon" target="_blank" aria-label="View on GitHub"><i class="fab fa-github"></i></a>
+          <div class="work-body">
+            <h3>Stride (3rd place, Abstraction Hackathon)</h3>
+            <p class="work-hook">AI-powered resume journaling assistant</p>
+          </div>
+          <div class="work-preview">
+            <img src="images/stride.jpg" alt="Stride">
+          </div>
+          <div class="work-hover-panel">
+            <div class="hover-line"><strong>Problem</strong><p>Research needed scalable, structured data collection for remote participants.</p></div>
+            <div class="hover-line"><strong>Built</strong><p>A React + Qualtrics workflow for human-AI writing studies.</p></div>
+            <div class="hover-line"><strong>Impact</strong><p>Supported 50+ participants and made study data easier to analyze.</p></div>
+          </div>
         </article>
 
-        <article class="work-card">
+        <article class="work-card fade-in" data-project="centsible">
+          <a class="github-corner" href="https://github.com/calvin-cs262-Fall2024-TheATeam/Centsible-Client" target="_blank" aria-label="View Centsible on GitHub"><i class="fab fa-github"></i></a>
+          <div class="work-body">
+            <h3>Centsible Budgeting App</h3>
+            <p class="work-hook">A personal finance app that turns spending data into clearer monthly insights.</p>
+          </div>
+          <div class="work-preview">
+            <img src="images/centsible.jpg" alt="Centsible Budgeting App">
+          </div>
+          <div class="work-hover-panel">
+            <div class="hover-line"><strong>Problem</strong><p>Bank statements are hard to interpret when users want quick monthly insight.</p></div>
+            <div class="hover-line"><strong>Built</strong><p>Transaction views, category reports, and an interactive donut chart.</p></div>
+            <div class="hover-line"><strong>Impact</strong><p>Made spending habits easier to visualize and reflect on.</p></div>
+          </div>
         </article>
 
-        <article class="work-card">
+        <article class="work-card fade-in" data-project="advisor">
+          <a class="github-corner" href="https://github.com/yourusername" target="_blank" aria-label=""><i class="fab fa-github"></i></a>
+          <div class="work-body">
+            <h3>Proj 4</h3>
+            <p class="work-hook"></p>
+          </div>
+          <div class="work-preview"></div>
+          <div class="work-hover-panel">
+            <div class="hover-line"><strong>Problem</strong><p>Course data is difficult to search manually when planning quickly.</p></div>
+            <div class="hover-line"><strong>Built</strong><p>A tool-based assistant using structured course data and targeted search.</p></div>
+            <div class="hover-line"><strong>Impact</strong><p>Turned raw course data into guided, easier-to-use answers.</p></div>
+          </div>
         </article>
-
       </div>
-
     </section>
 
+    <!--  Roles section  -->
     <section id="roles">
+      <p class="section-label">My Roles</p>
+      <p class="roles-intro fade-in">Click to see experiences gained through these roles!</p>
 
-      <p class="section-label">
-        Roles
-      </p>
-
-      <h2>
-        Experiences
-      </h2>
-
-      <div class="role-tabs">
-
-        <button class="role-tab active">
-          Category
-        </button>
-
-        <button class="role-tab">
-          Category
-        </button>
-
-        <button class="role-tab">
-          Category
-        </button>
-
-        <button class="role-tab">
-          Category
-        </button>
-
+      <div class="role-tabs fade-in" id="roleTabs" aria-label="Role categories">
+        <button class="role-tab active" data-role-tab="researcher">Researcher</button>
+        <button class="role-tab" data-role-tab="builder">Builder</button>
+        <button class="role-tab" data-role-tab="teacher">Teacher</button>
+        <button class="role-tab" data-role-tab="leader">Leader</button>
+        <button class="role-tab" data-role-tab="all">All</button>
       </div>
 
-      <div class="role-tab-content active">
-
+      <!-- Researcher -->
+      <div class="role-tab-content active" id="researcher-content">
         <div class="role-cloud">
-
           <article class="role-card-simple">
+            <div class="role-main">
+              <div>
+                <h4>AI Research Engineer Intern</h4>
+                <p class="role-org">AI Tools Lab</p>
+                <p class="role-desc">Evaluated how people interact with LLMs by building a full-stack Typescript, React & Python infrastructure to collect and analyze UX data from 50+ participants.</p>
+              </div>
+            </div>
           </article>
-
-          <article class="role-card-simple">
+          <article class="role-card-simple has-path">
+            <div class="role-main">
+              <div>
+                <h4>Research Assistant</h4>
+                <p class="role-org">Computer Science Department, Calvin University</p>
+                <p class="role-desc">Maintained and extended a production backend on Hugging Face Spaces while collaborating cross-functionally to analyze AI intervention impacts and drive iterative system improvements.</p>
+              </div>
+              <p class="role-hint">How I got here →</p>
+            </div>
+            <div class="role-hover">
+              <p class="role-hover-title">How I got here</p>
+              <ul class="role-path-list">
+                <li>Started with paper I read in 2023 called "Towards Full Authorship with AI" by Dr. Ken Arnold that sparkled my interest in AI, especially in the ways humans interact with LLMs.</li>
+              </ul>
+            </div>
           </article>
-
-          <article class="role-card-simple">
-          </article>
-
-          <article class="role-card-simple">
-          </article>
-
         </div>
-
       </div>
 
+      <!-- Builder -->
+      <div class="role-tab-content" id="builder-content">
+        <div class="role-cloud">
+          <article class="role-card-simple has-path">
+            <div class="role-main">
+              <div>
+                <h4>UI/UX Designer & Developer</h4>
+                <p class="role-org">Thoughtful AI Writing Tools, Centsible, Stride</p>
+                <p class="role-desc">Independently owned and shipped 3 projects end-to-end, designing in Figma and developing interfaces that translate complex data and AI workflows into intuitive, real-world tools.</p>
+              </div>
+              <p class="role-hint">How I got here →</p>
+            </div>
+            <div class="role-hover">
+              <p class="role-hover-title">How I got here</p>
+              <ul class="role-path-list">
+                <li>When building an usable tool, I have a very specific and niche approach to how I want it to function and look. It takes me several iterations from my iPad sketches, paper prototypes to digital Figma designs.</li>
+              </ul>
+            </div>
+          </article>
+          <article class="role-card-simple">
+            <div class="role-main">
+              <div>
+                <h4>Software Developer</h4>
+                <p class="role-org"> Software Development, AI/Research, CS Coursework </p>
+                <p class="role-desc">Developed and maintained 7 different cross-platform applications and collaborated with 20 different team members using GitHub workflows since 2022.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- Teacher -->
+      <div class="role-tab-content" id="teacher-content">
+        <div class="role-cloud">
+          <article class="role-card-simple has-path">
+            <div class="role-main">
+              <div>
+                <h4>CS Lab Assistant</h4>
+                <p class="role-org">CS112 + CS214</p>
+                <p class="role-desc">Carefully evaluated over 800+ submissions in 4 programming languages and helped 60+ students break down C++ concepts and debug thoughtfully.</p>
+              </div>
+              <p class="role-hint">How I got here →</p>
+            </div>
+            <div class="role-hover">
+              <p class="role-hover-title">How I got here</p>
+              <ul class="role-path-list">
+                <li>CS112 was a challenging class for me when I took it my freshman year. I wanted to overcome that challenge and help other students to do the same.</li>
+              </ul>
+            </div>
+          </article>
+          <article class="role-card-simple">
+            <div class="role-main">
+              <div>
+                <h4>Girls Who Code Mentor</h4>
+                <p class="role-org">GWC Mentorship</p>
+                <p class="role-desc">Guided 4 students over 16 months through technical projects and career development in CS, measured by all 4 advanced to next program year and 2 landed internships.</p>
+              </div>
+            </div>
+          </article>
+          <article class="role-card-simple has-path">
+            <div class="role-main">
+              <div>
+                <h4>Spanish Comm Leader</h4>
+                <p class="role-org">World Languages Department</p>
+                <p class="role-desc">Led total of 168 conversation sessions, facilitating Spanish language speaking practice for 60 students during the semesters.</p>
+              </div>
+              <p class="role-hint">How I got here →</p>
+            </div>
+            <div class="role-hover">
+              <p class="role-hover-title">How I got here</p>
+              <ul class="role-path-list">
+                <li>Studied Spanish formally alongside Computer Science</li>
+                <li>Used my trilingual background to support other language learners in teaching</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- Leader -->
+      <div class="role-tab-content" id="leader-content">
+        <div class="role-cloud">
+          <article class="role-card-simple has-path">
+            <div class="role-main">
+              <div>
+                <h4>Resident Assistant</h4>
+                <p class="role-org">Residence Life @ Calvin University</p>
+                <p class="role-desc">Oversaw 37 residents in community building, serving a residence hall of 200+ students along with 5 fellow RAs.</p>
+              </div>
+              <p class="role-hint">How I got here →</p>
+            </div>
+            <div class="role-hover">
+              <p class="role-hover-title">How I got here</p>
+              <ul class="role-path-list">
+                <li>Started with residence hall floor events leadership in 2022 and sparkled interest in community engagement.</li>
+              </ul>
+            </div>
+          </article>
+          <article class="role-card-simple">
+            <div class="role-main">
+              <div>
+                <h4>VP, Latin American Student Association</h4>
+                <p class="role-org">LASA, Student Organization</p>
+                <p class="role-desc">Presented 5 events and building spaces for cultural connection, belonging, and student leadership.</p>
+              </div>
+            </div>
+          </article>
+          <article class="role-card-simple">
+            <div class="role-main">
+              <div>
+                <h4>Orientation Leader</h4>
+                <p class="role-org">Center for Intercultural Student Development</p>
+                <p class="role-desc">Led and mentored individual 10 students during a multi-day orientation program, alongside of 14 fellow leaders.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- All  paginated, fixed height -->
+      <div class="role-tab-content" id="all-content">
+        <div class="all-roles-viewport" id="allRolesViewport">
+          <div class="all-roles-pages" id="allRolesPages">
+            <!-- Page 1 -->
+            <div class="all-roles-page">
+              <div class="role-cloud">
+                <article class="role-card-simple">
+                  <div class="role-main"><div>
+                    <h4>AI Research Intern</h4>
+                    <p class="role-org">AI Tools Lab</p>
+                    <p class="role-desc">Evaluated how people interact with LLMs by building a full-stack Typescript, React & Python infrastructure to collect and analyze UX data from 50+ participants.</p>
+                  </div></div>
+                </article>
+                <article class="role-card-simple has-path">
+                  <div class="role-main"><div>
+                    <h4>Research Assistant</h4>
+                      <p class="role-org">Computer Science Department, Calvin University</p>
+                      <p class="role-desc">Maintained and extended a production backend on Hugging Face Spaces while collaborating cross-functionally to analyze AI intervention impacts and drive iterative system improvements.</p>
+                    </div>
+                    <p class="role-hint">How I got here →</p>
+                  </div>
+                  <div class="role-hover">
+                    <p class="role-hover-title">How I got here</p>
+                    <ul class="role-path-list">
+                      <li>Started with paper I read in 2023 called "Towards Full Authorship with AI" by Dr. Ken Arnold that sparkled my interest in AI, especially in the ways humans interact with LLMs.</li>
+                    </ul>
+                  </div>
+                </article>
+                <article class="role-card-simple has-path">
+                  <div class="role-main"><div>
+                    <h4>UI/UX Designer and Developer</h4>
+                    <p class="role-org">Centsible, Stride</p>
+                    <p class="role-desc">Independently owned and shipped 3 projects end-to-end, designing in Figma and developing interfaces that translate complex data and AI workflows into intuitive, real-world tools.</p>
+                  </div><p class="role-hint">How I got here →</p></div>
+                  <div class="role-hover">
+                    <p class="role-hover-title">How I got here</p>
+                    <ul class="role-path-list">
+                      <li>When building an usable tool, I have a very specific and niche approach to how I want it to function and look. It takes me several iterations from my iPad sketches, paper prototypes to digital Figma designs.</li>
+                    </ul>
+                  </div>
+                </article>
+                <article class="role-card-simple">
+                  <div class="role-main"><div>
+                    <h4>Software Developer</h4>
+                    <p class="role-org">Software Development, AI/Research, CS Coursework</p>
+                    <p class="role-desc">Developed and maintained 7 different cross-platform applications and collaborated with 20 different team members using GitHub workflows since 2022.</p>
+                  </div></div>
+                </article>
+              </div>
+            </div>
+            <!-- Page 2 -->
+            <div class="all-roles-page">
+              <div class="role-cloud">
+                <article class="role-card-simple has-path">
+                  <div class="role-main"><div>
+                    <h4>CS Lab Assistant</h4>
+                    <p class="role-org">CS112 + CS214</p>
+                    <p class="role-desc">Carefully evaluated over 800+ submissions in 4 programming languages and helped 60+ students debug thoughtfully.</p>
+                  </div><p class="role-hint">How I got here →</p></div>
+                  <div class="role-hover">
+                    <p class="role-hover-title">How I got here</p>
+                    <ul class="role-path-list"><li>CS112 was a challenging class for me when I took it my freshman year. I wanted to overcome that and help others do the same.</li></ul>
+                  </div>
+                </article>
+                <article class="role-card-simple">
+                  <div class="role-main"><div>
+                    <h4>Girls Who Code Mentor</h4>
+                    <p class="role-org">GWC Mentorship</p>
+                    <p class="role-desc">Guided 4 students over 16 months through technical projects; all 4 advanced to the next year and 2 landed internships.</p>
+                  </div></div>
+                </article>
+                <article class="role-card-simple has-path">
+                  <div class="role-main"><div>
+                    <h4>Spanish Communication Leader</h4>
+                    <p class="role-org">World Languages Department</p>
+                    <p class="role-desc">Led 168 conversation sessions for 60 students across semesters.</p>
+                  </div><p class="role-hint">How I got here →</p></div>
+                  <div class="role-hover">
+                    <p class="role-hover-title">How I got here</p>
+                    <ul class="role-path-list">
+                      <li>Studied Spanish formally alongside Computer Science</li>
+                      <li>Used my trilingual background to support other language learners</li>
+                    </ul>
+                  </div>
+                </article>
+                <article class="role-card-simple has-path">
+                  <div class="role-main"><div>
+                    <h4>Resident Assistant</h4>
+                    <p class="role-org">Residence Life @ Calvin University</p>
+                    <p class="role-desc">Oversaw 37 residents, serving a hall of 200+ students alongside 5 fellow RAs.</p>
+                  </div><p class="role-hint">How I got here →</p></div>
+                  <div class="role-hover">
+                    <p class="role-hover-title">How I got here</p>
+                    <ul class="role-path-list"><li>Started with floor events leadership in 2022 — sparked a deep interest in community building.</li></ul>
+                  </div>
+                </article>
+              </div>
+            </div>
+            <!-- Page 3 -->
+            <div class="all-roles-page">
+              <div class="role-cloud">
+                <article class="role-card-simple">
+                  <div class="role-main"><div>
+                    <h4>VP, Latin American Student Association</h4>
+                    <p class="role-org">LASA, Student Organization</p>
+                    <p class="role-desc">Coordinating events and building spaces for cultural connection, belonging, and student leadership.</p>
+                  </div></div>
+                </article>
+                <article class="role-card-simple">
+                  <div class="role-main"><div>
+                    <h4>Orientation Leader</h4>
+                    <p class="role-org">Center for Intercultural Student Development</p>
+                    <p class="role-desc">Led and mentored 10 students during a multi-day orientation program alongside 14 fellow leaders.</p>
+                  </div></div>
+                </article>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="all-pagination">
+          <button class="all-page-btn" id="allPrev" aria-label="Previous page"><i class="fas fa-chevron-left"></i></button>
+          <div class="all-page-dots">
+            <span class="all-dot active" data-page="0"></span>
+            <span class="all-dot" data-page="1"></span>
+            <span class="all-dot" data-page="2"></span>
+          </div>
+          <button class="all-page-btn" id="allNext" aria-label="Next page"><i class="fas fa-chevron-right"></i></button>
+        </div>
+      </div>
     </section>
 
-
+    <!--  Tools  -->
     <section id="tools">
+      <p class="section-label">Toolbox</p>
+      <p class="toolbox-intro fade-in">Click to learn about my technical skills!</p>
 
-      <p class="section-label">
-        Toolbox
-      </p>
-
-      <h2>
-        Technologies & Skills
-      </h2>
-
-      <div class="tool-category">
-
-        <h3>Category</h3>
-
+      <div class="tool-category fade-in">
+        <h3>AI, ML, LLM</h3>
         <div class="tool-cloud">
-
-          <button class="tool-chip">
-            Skill
-          </button>
-
-          <button class="tool-chip">
-            Skill
-          </button>
-
-          <button class="tool-chip">
-            Skill
-          </button>
-
+          <button class="tool-chip" data-tool="LLM Evaluation">LLM Evaluation</button>
+          <button class="tool-chip" data-tool="AI APIs">AI APIs</button>
+          <button class="tool-chip" data-tool="Prompt Engineering">Prompt Engineering</button>
+          <button class="tool-chip" data-tool="Human-AI Research">Human-AI Research</button>
+          <button class="tool-chip" data-tool="Experiment Design">Experiment Design</button>
+          <button class="tool-chip" data-tool="Statistical Analysis">Statistical Analysis</button>
+          <button class="tool-chip" data-tool="Anthropic Claude Code">Claude Code</button>
+          <button class="tool-chip" data-tool="OpenAI Codex">Codex</button>
         </div>
-
       </div>
 
+      <div class="tool-category fade-in">
+        <h3>Programming Languages</h3>
+        <div class="tool-cloud">
+          <button class="tool-chip" data-tool="Python">Python</button>
+          <button class="tool-chip" data-tool="JavaScript">JavaScript</button>
+          <button class="tool-chip" data-tool="Java">Java</button>
+          <button class="tool-chip" data-tool="C++">C++</button>
+          <button class="tool-chip" data-tool="C#">C#</button>
+          <button class="tool-chip" data-tool="Express">HTML/CSS</button>
+        </div>
+      </div>
+
+      <div class="tool-category fade-in">
+        <h3>Frameworks & Development</h3>
+        <div class="tool-cloud">
+          <button class="tool-chip" data-tool="React/Typescript">React</button>
+          <button class="tool-chip" data-tool="React Native">React Native</button>
+          <button class="tool-chip" data-tool="React/Typescript">Typescript</button>
+          <button class="tool-chip" data-tool="Next.js">Next.js</button>
+          <button class="tool-chip" data-tool="Expo">Node.js</button>
+          <button class="tool-chip" data-tool="Express">Express</button>
+          <button class="tool-chip" data-tool="Expo">Expo</button>
+          <button class="tool-chip" data-tool="Node.js">REST APIs</button>
+        </div>
+      </div>
+
+      <div class="tool-category fade-in">
+        <h3>Data & Cloud</h3>
+         <div class="tool-cloud">
+          <button class="tool-chip" data-tool="PostgreSQL">PostgreSQL</button>
+          <button class="tool-chip" data-tool="Azure">Azure</button>
+        </div>
+      </div>
+
+      <div class="tool-category fade-in">
+        <h3>Developer Tools</h3>
+        <div class="tool-cloud">
+          <button class="tool-chip" data-tool="Git">Git/GitHub</button>
+          <button class="tool-chip" data-tool="Langfuse">Langfuse</button>
+          <button class="tool-chip" data-tool="Git">Figma</button>
+          <button class="tool-chip" data-tool="Hugging Face">Hugging Face</button>
+          <button class="tool-chip" data-tool="Docker">Docker</button>
+          <button class="tool-chip" data-tool="Hugging Face">Qualtrics</button>
+          <button class="tool-chip" data-tool="GitHub">Canva</button>
+        </div>
+      </div>
     </section>
 
     <section id="contact">
-
-      <p class="section-label">
-        Contact
-      </p>
-
-      <h2>
-        Let's Connect
-      </h2>
-
-      <p>
-        Contact description.
-      </p>
-
+      <p class="section-label">Contact</p>
+      <p class="toolbox-intro fade-in">Reach out!</p>
       <div class="contact-links">
-
-        <a href="#" class="btn primary">
-          Contact
+        <a href="mailto:joohayoo5@gmail.com" class="btn primary">I'm an email away!</a>
+        <a href="https://www.linkedin.com/in/hannah-yoo-a8b128257/" target="_blank" class="btn secondary">
+          or LinkedIn away, too!<i class="fab fa-linkedin"></i> 
         </a>
-
-        <a href="#" class="btn secondary">
-          LinkedIn
-        </a>
-
-        <a href="#" class="btn secondary">
-          GitHub
-        </a>
-
       </div>
-
     </section>
-
   </main>
-
 </div>
+
+<!-- Project modal -->
+<div class="project-modal" id="projectModal" aria-hidden="true">
+  <div class="project-box" role="dialog" aria-modal="true" aria-labelledby="projectModalTitle">
+    <div class="project-content">
+      <div class="project-top">
+        <div>
+          <p class="section-label" id="projectModalTag">AI Research</p>
+          <h3 id="projectModalTitle">Project Title</h3>
+        </div>
+        <div class="modal-actions">
+          <a class="modal-icon-link" id="projectModalGithub" href="#" target="_blank" aria-label="Open GitHub"><i class="fab fa-github"></i></a>
+          <button class="modal-close" id="projectModalClose" aria-label="Close">×</button>
+        </div>
+      </div>
+      <div class="modal-detail-grid" id="projectModalDetails"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+// tool data structure
+const toolData = {
+
+  "LLM Evaluation": {
+    usedIn: ["Writing Tools Research Platform", "Paper Review Feedback Study"],
+    description: "Designed evaluation workflows to compare AI-generated writing support across multiple language models, analyzing suggestion quality, acceptance behavior, and user perceptions."
+  },
+
+  "AI APIs": {
+    usedIn: ["Writing Tools Research Platform", "Course Advisor Bot"],
+    description: "Integrated large language model APIs to generate contextual suggestions, automate workflows, and support interactive AI-assisted experiences."
+  },
+
+  "Prompt Engineering": {
+    usedIn: ["Writing Tools Research Platform"],
+    description: "Designed and iteratively refined prompts for multiple writing-support strategies, improving relevance, usefulness, and contextual awareness."
+  },
+
+  "Human-AI Research": {
+    usedIn: ["Thoughtful AI Lab", "Writing Tools Research Platform"],
+    description: "Investigated how people interact with AI-generated suggestions, focusing on user agency, ownership, trust, and collaborative writing experiences."
+  },
+
+  "Experiment Design": {
+    usedIn: ["LLM Evaluation Study"],
+    description: "Designed research protocols, participant workflows, behavioral metrics, and evaluation criteria to measure AI-assisted writing outcomes."
+  },
+
+  "Statistical Analysis": {
+    usedIn: ["Research Studies", "Participant Data Analysis"],
+    description: "Analyzed behavioral and survey data to identify patterns, evaluate outcomes, and support evidence-based conclusions."
+  },
+
+  "Claude Code": {
+    usedIn: ["Research Development", "Personal Projects"],
+    description: "Used agentic AI workflows for code generation, debugging, refactoring, and rapid prototyping."
+  },
+
+  "Codex": {
+    usedIn: ["Research Development", "Personal Projects"],
+    description: "Leveraged AI-assisted coding tools to accelerate implementation, debugging, and software experimentation."
+  },
+
+  Python: {
+    usedIn: ["Research Analysis", "LLM Evaluation Study"],
+    description: "Used for AI evaluation pipelines, behavioral data analysis, research tooling, and automation across multiple AI research and software development projects."
+  },
+
+  JavaScript: {
+    usedIn: ["Writing Tools Research Platform", "Centsible", "Portfolio Website"],
+    description: "Primary language for building interactive web applications, frontend interfaces, and full-stack software projects."
+  },
+
+  Java: {
+    usedIn: ["Software Engineering Coursework"],
+    description: "Applied object-oriented programming principles, data structures, and software design practices."
+  },
+
+  "C++": {
+    usedIn: ["CS112 Lab Assistant"],
+    description: "Used for foundational programming, memory management concepts, object-oriented programming, and algorithmic problem solving through 14 labs, 10 programming projects, and teaching support as a CS112 Lab Assistant."
+  },
+
+  "C#": {
+    usedIn: ["CS212 Data Structures & Algorithms"],
+    description: "Applied data structures and algorithmic techniques in C#, completing 10 labs and 10 programming projects focused on efficiency, problem solving, and software design."
+  },
+
+  "HTML/CSS": {
+    usedIn: ["Portfolio Development", "Web Projects"],
+    description: "Built responsive, accessible, and visually engaging user interfaces with modern web standards."
+  },
+
+  React: {
+    usedIn: ["Writing Tools Research Platform", "Portfolio Projects"],
+    description: "Built component-based interfaces, managed application state, and developed interactive user experiences."
+  },
+
+  "React Native": {
+    usedIn: ["Centsible Budgeting App"],
+    description: "Developed cross-platform mobile experiences including transaction management, reporting, and analytics features."
+  },
+
+  TypeScript: {
+    usedIn: ["Writing Tools Research Platform"],
+    description: "Improved code reliability and maintainability through static typing and scalable frontend architecture."
+  },
+
+  "Next.js": {
+    usedIn: ["Portfolio Website", "Web Applications"],
+    description: "Used for modern React development with routing, optimized rendering, and scalable application structure."
+  },
+
+  Expo: {
+    usedIn: ["Centsible Budgeting App"],
+    description: "Accelerated React Native development through rapid testing, deployment, and device integration workflows."
+  },
+
+  "Node.js": {
+    usedIn: ["StudyBot", "Full-Stack Applications"],
+    description: "Built server-side functionality and application logic to support interactive web experiences."
+  },
+
+  Express: {
+    usedIn: ["StudyBot", "Backend APIs"],
+    description: "Created lightweight REST endpoints and backend services for data access and application workflows."
+  },
+
+  "REST APIs": {
+    usedIn: ["Multiple Full-Stack Projects"],
+    description: "Designed and consumed API endpoints to connect frontend applications with backend services."
+  },
+
+  PostgreSQL: {
+    usedIn: ["Centsible", "Cloud Database Workflows"],
+    description: "Managed relational data storage, querying, and application persistence using SQL databases."
+  },
+
+  Azure: {
+    usedIn: ["Cloud Database Hosting"],
+    description: "Worked with cloud-hosted infrastructure and managed database services to support application deployment."
+  },
+
+  "Git/GitHub": {
+    usedIn: ["Research Projects", "Team Development", "Personal Projects"],
+    description: "Used version control, branching strategies, pull requests, and collaborative development workflows."
+  },
+
+  Docker: {
+    usedIn: ["Development Environments"],
+    description: "Containerized applications and dependencies to improve portability, consistency, and reproducibility."
+  },
+
+  Langfuse: {
+    usedIn: ["Writing Tools Research Platform"],
+    description: "Tracked AI interactions, monitored model behavior, and supported evaluation workflows for language model research."
+  },
+
+  "Hugging Face": {
+    usedIn: ["AI Research"],
+    description: "Worked with open-source models, datasets, and machine learning resources for experimentation and evaluation."
+  },
+
+  Qualtrics: {
+    usedIn: ["Research Studies"],
+    description: "Designed surveys and collected participant data to support human-centered research and evaluation."
+  },
+
+  Figma: {
+    usedIn: ["UI/UX Design", "Application Prototyping"],
+    description: "Created wireframes, interface mockups, and design concepts for software projects."
+  },
+
+  Canva: {
+    usedIn: ["Presentations", "Visual Communication"],
+    description: "Produced visual assets, presentations, and communication materials for academic and professional projects."
+  }
+};
+
+// Proj data structure
+const projectData = {
+  llm: { title: 'LLM Evaluation Study', github: 'https://github.com/AIToolsLab/writing-tools', details: { Problem: 'AI systems can appear helpful while still being inconsistent, overconfident, or difficult for users to trust.', Built: 'Designed an evaluation framework and analysis process for studying reliability gaps in LLM behavior.', Impact: 'Helped identify patterns that can inform better prompts, system design, and human-AI evaluation methods.' }, tools: ['Python', 'Statistics', 'Survey Data', 'Prompt Design', 'Qualitative Coding'] },
+  writing: { title: 'Writing Tools Research Platform', github: 'https://github.com/jooha-yoo/stride/tree/main/2026-hackathon', details: { Problem: 'The study needed scalable, structured data collection for remote participants and human-AI writing behavior.', Built: 'Built React + Qualtrics infrastructure to support remote research workflows and cleaner participant data.', Impact: 'Supported 50+ remote study participants and made the research process easier to run and analyze.' }, tools: ['React', 'Qualtrics', 'JavaScript', 'Research Design'] },
+  centsible: { title: 'Centsible Budgeting App', github: 'https://github.com/calvin-cs262-Fall2024-TheATeam/Centsible-Client', details: { Problem: 'Bank statement summaries are hard to interpret, especially when users want to understand spending patterns quickly.', Built: 'Built transaction views, reports, category breakdowns, and an interactive donut chart for monthly insights.', Impact: 'Made financial habits easier to visualize, explain, and reflect on through a cleaner mobile interface.' }, tools: ['React Native', 'JavaScript', 'Expo', 'Azure PostgreSQL'] },
+  advisor: { title: 'Course Advisor Bot', github: 'https://github.com/yourusername', details: { Problem: 'Course data can be overwhelming to search manually when students need fast, relevant planning information.', Built: 'Built a tool-based assistant using structured course data and targeted search functions.', Impact: 'Made course exploration faster and easier by turning raw course data into guided answers.' }, tools: ['Python', 'JSON', 'Structured Data'] }
+};
+
+const projectModal = document.getElementById('projectModal');
+const projectModalTitle = document.getElementById('projectModalTitle');
+const projectModalTag = document.getElementById('projectModalTag');
+const projectModalDetails = document.getElementById('projectModalDetails');
+const projectModalGithub = document.getElementById('projectModalGithub');
+const projectModalClose = document.getElementById('projectModalClose');
+
+function openProjectModal(key) {
+  const p = projectData[key]; if (!p) return;
+  projectModalTitle.textContent = p.title;
+  projectModalTag.style.display = 'none';
+  projectModalGithub.href = p.github;
+  projectModalGithub.style.display = 'grid';
+  const tiles = Object.entries(p.details).map(([k,v]) => `<div class="detail-tile"><strong>${k}</strong><p>${v}</p></div>`).join('');
+  const toolTile = `<div class="detail-tile"><strong>Tools</strong><div class="tool-link-row">${p.tools.map(t=>`<span class="tool-link">${t}</span>`).join('')}</div></div>`;
+  projectModalDetails.innerHTML = tiles + toolTile;
+  projectModal.classList.add('open');
+  projectModal.setAttribute('aria-hidden', 'false');
+}
+
+function openToolModal(name) {
+  const tool = toolData[name]; if (!tool) return;
+  projectModalTag.style.display = 'none';
+  projectModalTitle.textContent = name;
+  projectModalGithub.style.display = 'none';
+  projectModalDetails.innerHTML = `
+    <div class="detail-tile"><strong>Used in</strong><ul class="proof-list">${tool.usedIn.map(i=>`<li>${i}</li>`).join('')}</ul></div>
+    <div class="detail-tile"><strong>How I use it</strong><p>${tool.description}</p></div>`;
+  projectModal.classList.add('open');
+  projectModal.setAttribute('aria-hidden', 'false');
+}
+
+function closeProjectModal() {
+  projectModal.classList.remove('open');
+  projectModal.setAttribute('aria-hidden', 'true');
+}
+
+document.querySelectorAll('.work-card[data-project]').forEach(card => card.addEventListener('click', () => openProjectModal(card.dataset.project)));
+document.querySelectorAll('.github-corner').forEach(link => link.addEventListener('click', e => e.stopPropagation()));
+projectModalClose.addEventListener('click', closeProjectModal);
+projectModal.addEventListener('click', e => { if (e.target === projectModal) closeProjectModal(); });
+document.getElementById('tools')?.addEventListener('click', e => { const chip = e.target.closest('.tool-chip'); if (chip) openToolModal(chip.dataset.tool); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeProjectModal(); });
+
+document.getElementById('roleTabs')?.addEventListener('click', e => {
+  const btn = e.target.closest('.role-tab'); if (!btn) return;
+  document.querySelectorAll('.role-tab').forEach(t => t.classList.toggle('active', t === btn));
+  document.querySelectorAll('.role-tab-content').forEach(c => c.classList.toggle('active', c.id === `${btn.dataset.roleTab}-content`));
+});
+
+// All roles pagination and height lock
+(function() {
+  const pages = document.getElementById('allRolesPages');
+  const viewport = document.getElementById('allRolesViewport');
+  const dots = document.querySelectorAll('.all-dot');
+  const prevBtn = document.getElementById('allPrev');
+  const nextBtn = document.getElementById('allNext');
+  const total = 3;
+  let current = 0;
+
+  function setPage(n) {
+    current = Math.max(0, Math.min(total - 1, n));
+    pages.style.transform = `translateX(-${current * 100}%)`;
+    dots.forEach((d, i) => d.classList.toggle('active', i === current));
+  }
+
+  // Set viewport height once to lock it
+  function lockHeight() {
+    const allPage = document.querySelector('.all-roles-page');
+    if (allPage) {
+      // Let it be natural height first
+      viewport.style.height = allPage.offsetHeight + 'px';
+    }
+  }
+
+  prevBtn.addEventListener('click', () => setPage(current - 1));
+  nextBtn.addEventListener('click', () => setPage(current + 1));
+  dots.forEach(d => d.addEventListener('click', () => setPage(parseInt(d.dataset.page))));
+
+  // Lock height when "All" tab is first shown
+  document.getElementById('roleTabs').addEventListener('click', e => {
+    const btn = e.target.closest('.role-tab');
+    if (btn && btn.dataset.roleTab === 'all') {
+      requestAnimationFrame(() => {
+        // Calculate height as max of all pages
+        const allPages = document.querySelectorAll('.all-roles-page');
+        let maxH = 0;
+        allPages.forEach(p => { if (p.offsetHeight > maxH) maxH = p.offsetHeight; });
+        viewport.style.height = (maxH || 480) + 'px';
+      });
+    }
+  });
+})();
+
+document.getElementById('year').textContent = new Date().getFullYear();
+
+// Counters & fade in 
+function animateCounter(counter) {
+  const raw = counter.dataset.target;
+  const target = parseInt(raw);
+  let count = 0;
+  const steps = 50, stepTime = 2000 / steps, increment = target / steps;
+  const timer = setInterval(() => {
+    count += increment;
+    if (count < target) { counter.textContent = Math.ceil(count); }
+    else { counter.textContent = target; clearInterval(timer); }
+  }, stepTime);
+}
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      const counter = entry.target.querySelector('.counter');
+      if (counter) animateCounter(counter);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.18 });
+
+document.querySelectorAll('.fade-in, .proof-card').forEach(el => observer.observe(el));
+
+//  Active nav on scroll 
+const sections = document.querySelectorAll('main section[id]');
+const navLinks = document.querySelectorAll('#sideNav a');
+const navObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === `#${entry.target.id}`));
+  });
+}, { rootMargin: '-40% 0px -50% 0px' });
+sections.forEach(s => navObserver.observe(s));
+</script>
 </body>
+</html>
